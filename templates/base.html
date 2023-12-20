@@ -1,0 +1,296 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>ChatGPT Bot</title>
+    <style>
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: antiquewhite;
+        }
+
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            background-color: #f7f7f7;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .about-header {
+            background-color: #0056b3;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            border-radius: 10px;
+        }
+
+        .about-header h1 {
+            font-size: 36px;
+            font-weight: bold;
+        }
+
+        .about-header p {
+            font-size: 20px;
+        }
+
+        .about-container {
+            padding: 30px;
+        }
+
+        .about-item {
+            margin-bottom: 30px;
+        }
+
+        .about-item i {
+            font-size: 48px;
+            color: #0056b3;
+        }
+
+        .about-item h3 {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+
+        .about-item p {
+            font-size: 18px;
+        }
+
+        .about-item:hover {
+            background-color: #0056b3;
+        }
+
+        .about-item:hover i,
+        .about-item:hover h3,
+        .about-item:hover p {
+            color: #fff;
+            transition: all 0.4s;
+        }
+
+        .hr-blue {
+            width: 60px;
+            height: 4px;
+            background-color: #0056b3;
+            margin: 0 auto;
+            border: none;
+        }
+    </style>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
+    <link rel="shortcut icon" href="{% static 'images/AP-SBTET.png' %}" type="image/x-icon" />
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'index' %}">
+                <img src="{% static 'images/AP-SBTET.png' %}" alt="Logo" height="70" />
+                AskSbtet
+                <!-- Add your brand name here -->
+            </a>
+            {% if user.is_authenticated %}
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <!-- Use the first letter of the user's first name and last name as an icon -->
+                        <div class="user-icon">
+                            <span class="initials">{{ user.first_name|slice:":1"|upper }}</span>
+                        </div>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="profileDropdown">
+                        <!-- Add user-related options with icons here -->
+                        <a class="dropdown-item" href="{% url 'Myquestions' %}">
+                            <i class="fa fa-question-circle"></i> My Questions
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'logout' %}">
+                            <i class="fa fa-sign-out"></i> Logout
+                        </a>
+                        <!-- Add more items as needed -->
+                        {% endif %}
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="wrapper d-flex align-items-stretch">
+        <nav id="sidebar">
+            <div class="custom-menu">
+                <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                    <i class="fa fa-bars"></i>
+                    <span class="sr-only">Toggle Menu</span>
+                </button>
+            </div>
+            <div class="p-4">
+                <h1>
+                    <a href="index.html" class="logo">AskSbtet?<span>Ask and Learn</span></a>
+                </h1>
+                <ul class="list-unstyled components mb-5">
+                    <li class="active">
+                        <a href="#"><span class="fa fa-home mr-3"></span> Home</a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="fa fa-question-circle mr-3"></span> Questions
+                        </a>
+                        <!-- Sub-menu starts here -->
+                        <ul class="list-unstyled components-sub">
+                            <li><a href="#" style="text-align: center">General</a></li>
+                            <li><a href="#" style="text-align: center">Branch</a></li>
+                            <!-- Add more sub-menu items as needed -->
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="#"><span class="fa fa-user mr-3"></span> About</a>
+                    </li>
+                    <li>
+                        <a href="#"><span class="fa fa-sticky-note mr-3"></span> Blog</a>
+                    </li>
+                    <!-- Add more navigation items here -->
+                    <li>
+                        <a href="#"><span class="fa fa-paper-plane mr-3"></span> Contact Us</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Page Content -->
+        <div id="content" class="p-4 p-md-5 pt-5">
+            <div class="container-sm">
+                <div class="about-header">
+                    <h1 style="color: #fff;">WELCOME TO ASK SBTET</h1>
+                    <p>This website welcomes you to enjoy learning by clearing your doubts.</p>
+                </div>
+                <div class="container about-container">
+                    <div class="row">
+                        <!-- Mission -->
+                        <div class="col-md-4">
+                            <div class="card about-item text-center">
+                                <div class="card-body">
+                                    
+                                    <h3>MISSION</h3>
+                                    <hr class="hr-blue">
+                                    <p>At AskSBTET?, our mission is to empower learners of all ages and backgrounds to
+                                        conquer their educational hurdles. We believe that every question is an
+                                        opportunity to learn, and every doubt is a stepping stone to knowledge. Our
+                                        platform is designed to provide accessible and expert guidance to help
+                                        individuals overcome academic challenges.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Who Are We -->
+                        <div class="col-md-4">
+                            <div class="card about-item text-center">
+                                <div class="card-body">
+                                    <i class="fa fa-pencil"></i>
+                                    <h3>WHO ARE WE</h3>
+                                    <hr class="hr-blue">
+                                    <p>AskSBTET? is a passionate team of educators and problem-solvers. We come from
+                                        diverse backgrounds, united by a common goal - to make learning easier and more
+                                        enjoyable for everyone. Our combined expertise spans subjects from mathematics
+                                        to various diverse branches, and we are committed to delivering top-notch
+                                        solutions to your doubts.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Our Vision -->
+                        <div class="col-md-4">
+                            <div class="card about-item text-center">
+                                <div class="card-body">
+                                    <i class="fa fa-globe"></i>
+                                    <h3>OUR VISION</h3>
+                                    <hr class="hr-blue">
+                                    <p>We envision a technical world where learning knows no bounds. With DoubtBusters
+                                        by your side, we're confident that you can conquer any challenge, unravel any
+                                        complexity, and achieve your educational dreams. Our main motto is to solve your
+                                        doubts through interacting with both co-learners and teachers.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <!-- Our Team -->
+                        <div class="col-md-6">
+                            <div class="card about-item text-center">
+                                <div class="card-body">
+                                    <h3>OUR TEAM</h3>
+                                    <hr class="hr-blue">
+                                    <p>Our team of 14 dedicated members is passionately working together to develop a
+                                        cutting-edge student doubt-solving website. Our platform will provide a seamless
+                                        and interactive experience for students seeking answers to their academic
+                                        queries. With a user-friendly interface and a diverse range of subjects covered,
+                                        we aim to empower students in their quest for knowledge and clarity, making
+                                        learning a more enjoyable and accessible journey.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- What We Offer -->
+                        <div class="col-md-6">
+                            <div class="card about-item text-center">
+                                <div class="card-body">
+                                    <h3>WHAT WE OFFER</h3>
+                                    <hr class="hr-blue">
+                                    <ul class="list-unstyled">
+                                        <li><b>24/7 Doubt Support:</b> Our platform is always open to cater to your
+                                            questions. You can ask your doubts with others.</li>
+                                        <li><b>Expert Teachers Partnership:</b> Our pool of experienced teachers can
+                                            provide accurate and helpful solutions irrespective of their branches.</li>
+                                        <li><b>Community Learning:</b> Join a community of learners just like you.
+                                            Discuss doubts, share insights, and collaborate on study projects in our
+                                            vibrant forums.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="footer mt-3">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4 style="color: white">Connect with Us</h4>
+                            <!-- Social media icons -->
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                            <a href="#"><i class="fa fa-instagram"></i></a>
+                            <a href="#"><i class="fa fa-linkedin"></i></a>
+                        </div>
+                        <div class="col-md-6">
+                            <h4 style="color: white">About AskSbtet</h4>
+                            <p style="color: white">
+                                AskSbtet is a dynamic online platform designed to foster a
+                                thriving and interactive community for students and educators
+                                alike. It serves as a hub for knowledge sharing, question
+                                asking, and collaboration within the academic world.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <script></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+
+</html>

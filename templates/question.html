@@ -1,0 +1,354 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Ask Your Question</title>
+    <meta charset="utf-8"/>
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <link
+            href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900"
+            rel="stylesheet"
+    />
+
+    <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <script
+            src="https://cdn.tiny.cloud/1/5fr76i1ojp5nf8bypdqjwn3z17xh3ugwultl3gp5t29ogs4d/tinymce/5/tinymce.min.js"
+            referrerpolicy="origin"
+    ></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/question.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}"/>
+    <link
+            rel="shortcut icon"
+            href="{% static 'images/AP-SBTET.png' %}"
+            type="image/x-icon"
+    />
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'index' %}">
+            <img
+                    src="{% static 'images/AP-SBTET.png' %}"
+                    alt="Logo"
+                    height="70"
+            />
+            AskSbtet
+            <!-- Add your brand name here -->
+        </a>
+        {% if user.is_authenticated %}
+            <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+            <a
+                    class="nav-link dropdown-toggle"
+                    href="#"
+                    id="profileDropdown"
+                    role="button"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+            >
+                <!-- Use the first letter of the user's first name and last name as an icon -->
+                <div class="user-icon">
+                <span class="initials"
+                >{{ user.first_name|slice:":1"|upper }}</span
+                >
+                </div>
+            </a>
+            <div class="dropdown-menu" aria-labelledby="profileDropdown">
+            <!-- Add user-related options with icons here -->
+            <a class="dropdown-item" href="{% url 'Myquestions' %}">
+                <i class="fa fa-question-circle"></i> My Questions
+            </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'logout' %}">
+                <i class="fa fa-sign-out"></i> Logout
+            </a>
+            <!-- Add more items as needed -->
+        {% endif %}
+        </div>
+        </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Sidebar -->
+<div class="wrapper d-flex align-items-stretch">
+      <nav id="sidebar">
+            <div class="custom-menu">
+                <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                    <i class="fa fa-bars"></i>
+                    <span class="sr-only">Toggle Menu</span>
+                </button>
+            </div>
+            <div class="p-4">
+                <h1>
+                    <a href="{% url 'index' %}" class="logo">AskSbtet?<span>Ask and Learn</span></a>
+                </h1>
+                <ul class="list-unstyled components mb-5">
+                    <li class="active">
+                        <a href="{% url 'index' %}"><span class="fa fa-home mr-3"></span> Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'branch' %}">
+                            <span class="fa fa-question-circle mr-3"></span> Questions
+                        </a>
+                        <!-- Sub-menu starts here -->
+                        <ul class="list-unstyled components-sub">
+                             <a href="{% url 'chatbot' %}" style="text-align: center">Quick Doubt Solver</a>
+                            <!-- Add more sub-menu items as needed -->
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="{% url 'aboutus' %}"><span class="fa fa-user mr-3"></span> About Us</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'blog' %}"><span class="fa fa-sticky-note mr-3"></span> Blog</a>
+                    </li>
+                    <!-- Add more navigation items here -->
+                    <li>
+                        <a href="{% url 'contactus' %}"><span class="fa fa-paper-plane mr-3"></span> Contact Us</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    <!-- Page Content -->
+    <div id="content" class="p-4 p-md-5 pt-5">
+        <div class="container-sm">
+            {% if messages %} {% for message in messages %} {% if message.tags == 'success' %}
+                <div class="alert alert-success">{{ message }}</div>
+            {% elif message.tags == 'error' or message.tags == 'warning' %}
+                <div class="alert alert-danger">{{ message }}</div>
+            {% endif %} {% endfor %} {% endif %}
+            <form
+                    action="{% url 'AskyourQuestion' %}"
+                    method="post"
+                    enctype="multipart/form-data"
+                    onsubmit="return validateForm();"
+                    autocomplete="off"
+            >
+                {% csrf_token %}
+                <h2 class="text-center">Ask your Question</h2>
+                <div class="form-group">
+                    <label for="stream">Select your Stream:</label>
+                    <select class="custom-select" name="stream" id="stream">
+                        <option selected>Select your stream</option>
+                        {% for branch in branches %}
+                            <option value="{{ branch.short_form }}">
+                                {{ branch.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <div id="stream-error" class="text-danger"></div>
+                </div>
+                <div class="form-group">
+                    <label for="question">Question Title:</label>
+                    <input
+                            type="text"
+                            class="form-control"
+                            name="question"
+                            id="question"
+                            aria-describedby="helpId"
+                            placeholder="Write your question here"
+                    />
+                    <div id="question-error" class="text-danger"></div>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea
+                            class="form-control"
+                            name="description"
+                            id="description"
+                            rows="3"
+                            placeholder="Write your question description here"
+                    ></textarea>
+                    <div id="description-error" class="text-danger"></div>
+                </div>
+                <div class="form-group">
+                    <label for="try-expect"
+                    >What did you try and what were you expecting?:</label
+                    >
+                    <textarea
+                            class="form-control"
+                            name="user-expecting"
+                            id="try-expect"
+                            placeholder="Describe what you tried, what you expected to happen, and what actually resulted. Minimum 20 characters."
+                    ></textarea>
+                    <div id="try-expect-error" class="text-danger"></div>
+                </div>
+                <div class="form-group">
+                    <label for="image">Upload Image:</label>
+                    <input
+                            type="file"
+                            class="form-control-file"
+                            name="image"
+                            id="image"
+                            placeholder="Upload image if you have"
+                            aria-describedby="fileHelpId"
+                            accept="image/*"
+                            onchange="previewImage(this)"
+                    />
+                    <small id="fileHelpId" class="form-text text-muted"
+                    >Upload the picture of the question or problem</small
+                    >
+                </div>
+                <div class="form-group">
+                    <img
+                            id="image-preview"
+                            src="#"
+                            alt="Image Preview"
+                            style="max-width: 100%; max-height: 200px; display: none"
+                    />
+                </div>
+                <div class="form-check">
+                    <label class="form-check-label" for="responses">
+                        <input
+                                type="checkbox"
+                                class="form-check-input"
+                                name="responses"
+                                id="responses"
+                                value="checkedValue"
+                                checked
+                        />
+                        Send responses of this question via email
+                    </label>
+                </div>
+                <div class="d-grid gap-2 mt-3">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer mt-4">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4 style="color: white">Connect with Us</h4>
+                        <!-- Social media icons -->
+                        <a href="#"><i class="fa fa-facebook"></i></a>
+                        <a href="#"><i class="fa fa-twitter"></i></a>
+                        <a href="#"><i class="fa fa-instagram"></i></a>
+                        <a href="#"><i class="fa fa-linkedin"></i></a>
+                    </div>
+                    <div class="col-md-6">
+                        <h4 style="color: white">About AskSbtet</h4>
+                        <p style="color: white">
+                            AskSbtet is a dynamic online platform designed to foster a
+                            thriving and interactive community for students and educators
+                            alike. It serves as a hub for knowledge sharing, question
+                            asking, and collaboration within the academic world.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/popper.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script>
+    tinymce.init({
+        selector: "#description", // ID of the first textarea
+        plugins: "link image lists",
+        toolbar:
+            "undo redo | styleselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image",
+        content_css:
+            "https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css",
+    });
+
+    tinymce.init({
+        selector: "#try-expect", // ID of the second textarea
+        plugins: "link image lists",
+        toolbar:
+            "undo redo | styleselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image",
+        content_css:
+            "https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css",
+    });
+</script>
+
+<script>
+    function validateForm() {
+        var isValid = true;
+
+        // Reset error messages
+        document.getElementById("stream-error").textContent = "";
+        document.getElementById("question-error").textContent = "";
+        document.getElementById("description-error").textContent = "";
+        document.getElementById("try-expect-error").textContent = "";
+
+        // Validate Stream
+        var stream = document.getElementById("stream");
+        if (stream.value === "Select your stream") {
+            document.getElementById("stream-error").textContent =
+                "Please select your stream.";
+            isValid = false;
+        }
+
+        // Validate Question Title
+        var question = document.getElementById("question");
+        if (question.value.trim() === "") {
+            document.getElementById("question-error").textContent =
+                "Question title is required.";
+            isValid = false;
+        }
+
+        // Validate Description
+        var description = document.getElementById("description");
+        if (description.value.trim() === "") {
+            document.getElementById("description-error").textContent =
+                "Description is required.";
+            isValid = false;
+        }
+
+        // Validate Try and Expect
+        var tryExpect = document.getElementById("try-expect");
+        if (tryExpect.value.trim().length < 20) {
+            document.getElementById("try-expect-error").textContent =
+                "Description should be at least 20 characters.";
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    function previewImage(input) {
+        var imagePreview = document.getElementById("image-preview");
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = "block";
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            imagePreview.style.display = "none";
+        }
+    }
+
+    // main.js
+    $(document).ready(function () {
+        // Function to handle the sidebar toggle
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,386 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ question.title }}</title>
+    <meta charset="utf-8"/>
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <link
+            href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900"
+            rel="stylesheet"
+    />
+
+    <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/answer.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}"/>
+    <style>
+
+    </style>
+    <script src="https://cdn.tiny.cloud/1/5fr76i1ojp5nf8bypdqjwn3z17xh3ugwultl3gp5t29ogs4d/tinymce/5/tinymce.min.js"
+            referrerpolicy="origin"></script>
+    <link
+            rel="shortcut icon"
+            href="{% static 'images/AP-SBTET.png' %}"
+            type="image/x-icon"
+    />
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'index' %}">
+            <img
+                    src="{% static 'images/AP-SBTET.png' %}"
+                    alt="Logo"
+                    height="70"
+            />
+            AskSbtet
+            <!-- Add your brand name here -->
+        </a>
+        <ul class="navbar-nav ml-auto">
+            <!-- user not authenticated -->
+            {% if not user.is_authenticated %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'signin' %}"
+                    >Sign In &nbsp;<i class="fa fa-sign-in" aria-hidden="true"></i>
+                        ></a
+                    >
+                </li>
+            {% else %}
+                <!-- user authenticated -->
+                <li class="nav-item dropdown">
+                    <a
+                            class="nav-link dropdown-toggle"
+                            href="#"
+                            id="profileDropdown"
+                            role="button"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                    >
+                        <!-- Use the first letter of the user's first name and last name as an icon -->
+                        <div class="user-icon">
+                <span class="initials"
+                >{{ user.first_name|slice:":1"|upper }}</span
+                >
+                        </div>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="profileDropdown">
+                        <!-- Add user-related options with icons here -->
+                        <a class="dropdown-item" href="{% url 'Myquestions' %}">
+                            <i class="fa fa-question-circle"></i> My Questions
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'logout' %}">
+                            <i class="fa fa-sign-out"></i> Logout
+                        </a>
+                        <!-- Add more items as needed -->
+                    </div>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+<!-- Sidebar -->
+<div class="wrapper d-flex align-items-stretch">
+    <nav id="sidebar">
+        <div class="custom-menu">
+            <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                <i class="fa fa-bars"></i>
+                <span class="sr-only">Toggle Menu</span>
+            </button>
+        </div>
+        <div class="p-4">
+            <h1>
+                <a href="{% url 'index' %}" class="logo">AskSbtet?<span>Ask and Learn</span></a>
+            </h1>
+            <ul class="list-unstyled components mb-5">
+                <li class="active">
+                    <a href="{% url 'index' %}"><span class="fa fa-home mr-3"></span> Home</a>
+                </li>
+                <li>
+                    <a href="{% url 'branch' %}">
+                        <span class="fa fa-question-circle mr-3"></span> Questions
+                    </a>
+                    <!-- Sub-menu starts here -->
+                    <ul class="list-unstyled components-sub">
+                        <a href="{% url 'chatbot' %}" style="text-align: center">Quick Doubt Solver</a>
+                        <!-- Add more sub-menu items as needed -->
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="{% url 'aboutus' %}"><span class="fa fa-user mr-3"></span> About Us</a>
+                </li>
+                <li>
+                    <a href="{% url 'blog' %}"><span class="fa fa-sticky-note mr-3"></span> Blog</a>
+                </li>
+                <!-- Add more navigation items here -->
+                <li>
+                    <a href="{% url 'contactus' %}"><span class="fa fa-paper-plane mr-3"></span> Contact Us</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div id="content" class="p-4 p-md-5 pt-5">
+        <div class="container-sm">
+            {% if messages %} {% for message in messages %} {% if message.tags == 'success' %}
+                <div class="alert alert-success">{{ message }}</div>
+            {% elif message.tags == 'error' or message.tags == 'warning' %}
+                <div class="alert alert-danger">{{ message }}</div>
+            {% endif %} {% endfor %} {% endif %}
+            <div class="container-sm bg-white text-center">
+                <h4>{{ question.title }}</h4>
+                <div class="row mt-2">
+                    <div class="col">Asked: {{ question.created_at }}</div>
+                    <div class="col">Modified: {{ question.modified_at }}</div>
+                    <div class="col">Views: {{ question.view_count }}</div>
+                    <div class="col">
+                        <a
+                                class="btn btn-primary"
+                                href="{% url 'AskyourQuestion' %}"
+                                role="button"
+                        >Ask Question</a
+                        >
+                    </div>
+                </div>
+            </div>
+            <div class="container-sm bg-white mt-2">
+                <h3>Description:</h3>
+                <div>
+                    {{ question.description |safe }} {% if question.image %}
+                    <h5>Images:</h5>
+                    <img
+                            src="{{ question.image.url }}"
+                            alt="image"
+                            class="img-fluid"
+                    />
+                {% endif %}
+                </div>
+                <h5>User Expecting:</h5>
+                <div>{{ question.user_expect| safe }}</div>
+                <div class="author-card">
+                    <div class="author-avatar">
+                        <i class="fa fa-user"></i>
+                    </div>
+                    <div class="author-info">
+                        <div class="author-name">
+                            {{ question.user.first_name }} {{ question.user.last_name }}
+                        </div>
+                        <div class="author-badge">{{ question.user.college_name }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% for answer in answers %}
+            <div class="container-sm bg-white mt-2">
+                <h3>Answer: {{ forloop.counter }}</h3>
+                {{ answer.content|safe }} {% if answer.image %}
+                <h5>Images:</h5>
+                <img src="{{ answer.image.url }}" alt="" class="img-fluid"/>
+            {% endif %}
+                <div class="author-card">
+                    <div class="author-avatar">
+                        <i class="fa fa-user"></i>
+                    </div>
+                    <div class="author-info">
+                        <div class="author-name">
+                            {{ answer.user.first_name }} {{ answer.user.last_name }}
+                        </div>
+                        <div class="author-badge">{{ answer.user.college_name }}</div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col">Answered at: {{ answer.created_at }}</div>
+                </div>
+            </div>
+        {% endfor %}
+
+        <div class="container-sm bg-white mt-2">
+            <h5>Your Answer:</h5>
+            <!-- Display the answer form for authenticated users -->
+            {% if user.is_authenticated %}
+                <div class="answer-form-container">
+                    <form
+                            action="{% url 'submit_answer' question.id %}"
+                            method="post"
+                            id="answer-form"
+                            enctype="multipart/form-data"
+                    >
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="answer-editor">Your Answer:</label>
+                            <textarea
+                                    class="form-control"
+                                    name="answer"
+                                    id="answer-editor" rows="3"
+                                    placeholder="Write your answer here"
+                            ></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="image">Upload Image:</label>
+                            <input
+                                    type="file"
+                                    class="form-control-file"
+                                    name="image"
+                                    id="image"
+                                    placeholder="upload image if you have"
+                                    aria-describedby="fileHelpId"
+                                    accept="image/*"
+                                    onchange="previewImage(this)"
+                            />
+                            <small id="fileHelpId" class="form-text text-muted"
+                            >upload the picture of the Answer if you Want</small
+                            >
+                        </div>
+                        <div class="form-group">
+                            <img
+                                    id="image-preview"
+                                    src="#"
+                                    alt="Image Preview"
+                                    style="max-width: 100%; max-height: 200px; display: none"
+                            />
+                        </div>
+                        <div class="d-grid gap-2 mt-3">
+                            <button type="submit" class="btn btn-primary" id="submit-button">
+                                Submit Answer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            {% else %}
+                <div class="answer-form-container" style="filter: blur(5px); pointer-events: none">
+                    <form
+                            action="{% url 'submit_answer' question.id %}"
+                            method="post"
+                            id="answer-form"
+                            enctype="multipart/form-data"
+                    >
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="answer-editor">Your Answer:</label>
+                            <textarea
+                                    class="form-control"
+                                    name="answer"
+                                    id="answer-editor"
+                                    rows="5"
+                                    placeholder="Write your answer here"
+                            ></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="image">Upload Image:</label>
+                            <input
+                                    type="file"
+                                    class="form-control-file"
+                                    name="image"
+                                    id="image"
+                                    placeholder="upload image if you have"
+                                    aria-describedby="fileHelpId"
+                                    accept="image/*"
+                                    onchange="previewImage(this)"
+                            />
+                            <small id="fileHelpId" class="form-text text-muted"
+                            >upload the picture of the Answer if you Want</small
+                            >
+                        </div>
+                        <div class="form-group">
+                            <img
+                                    id="image-preview"
+                                    src="#"
+                                    alt="Image Preview"
+                                    style="max-width: 100%; max-height: 200px; display: none"
+                            />
+                        </div>
+                        <div class="d-grid gap-2 mt-3">
+                            <button type="submit" class="btn btn-primary" id="submit-button">
+                                Submit Answer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <!-- Display a message and "Sign In" button for non-authenticated users -->
+                <div id="feedback-message" class="mt-3">
+                    <div id="login-prompt" class="mt-3">
+                        <p>Sign in to add your answer.</p>
+                        <a
+                                href="{% url 'signin' %}?next={{ request.path }}"
+                                class="btn btn-primary"
+                        >Sign In</a
+                        >
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <footer class="footer mt-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4 style="color: white">Connect with Us</h4>
+                        <!-- Social media icons -->
+                        <a href="#"><i class="fa fa-facebook"></i></a>
+                        <a href="#"><i class="fa fa-twitter"></i></a>
+                        <a href="#"><i class="fa fa-instagram"></i></a>
+                        <a href="#"><i class="fa fa-linkedin"></i></a>
+                    </div>
+                    <div class="col-md-6">
+                        <h4 style="color: white">About AskSbtet</h4>
+                        <p style="color: white">
+                            AskSbtet is a dynamic online platform designed to foster a
+                            thriving and interactive community for students and educators
+                            alike. It serves as a hub for knowledge sharing, question
+                            asking, and collaboration within the academic world.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <!-- Footer -->
+</div>
+
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+<script src="{% static 'js/popper.js' %}"></script>
+
+<script>
+    tinymce.init({
+        selector: "#answer-editor", // ID of the second textarea
+        plugins: 'link image lists',
+        toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image',
+        content_css: "https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css",
+    });
+
+    function previewImage(input) {
+        var imagePreview = document.getElementById('image-preview');
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            imagePreview.style.display = 'none';
+        }
+    }
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,411 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Blog</title>
+    <style>
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: antiquewhite;
+        }
+
+        .single-blog {
+            font-size: 20px;
+            box-shadow: 0px 0px 20px 1px rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            margin-top: 30px;
+            background-color: #fff;
+        }
+
+        .single-blog img {
+            width: 100%;
+        }
+
+        .single-blog span {
+            float: right;
+            font-size: 20px;
+            color: #0056b3;
+        }
+
+        .blog-text {
+            font-size: 18px;
+            text-align: justify;
+        }
+
+        .single-blog h2 {
+            margin-top: 10px;
+            font-size: 20px;
+            color: #007bff;
+        }
+
+        .single-blog h2 a {
+            text-decoration: none;
+        }
+
+        .read-more-btn {
+            background-image: linear-gradient(to left, #1c03b5, #5c8bef);
+            border-radius: 20px;
+            line-height: 20px;
+            font-size: 17px;
+            color: #fff;
+            border: none !important;
+            position: relative;
+        }
+
+        footer {
+            background: #0056b3;
+            padding: 20px;
+        }
+
+        footer p {
+            color: #fff;
+        }
+    </style>
+    <meta charset="utf-8"/>
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <link
+            href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900"
+            rel="stylesheet"
+    />
+
+    <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}"/>
+    <link
+            rel="shortcut icon"
+            href="{% static 'images/AP-SBTET.png' %}"
+            type="image/x-icon"
+    />
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'index' %}">
+            <img src="{% static 'images/AP-SBTET.png' %}" alt="Logo" height="70"/>
+            AskSbtet
+            <!-- Add your brand name here -->
+        </a>
+        <ul class="navbar-nav ml-auto">
+            <!-- If the user is not authenticated -->
+            {% if not user.is_authenticated %}
+                <li class="nav-item active">
+                    <a
+                            class="nav-link"
+                            href="{% url 'signup' %}"
+                            style="color: white; font-weight: bold"
+                    >
+                        Sign Up &nbsp;<i class="fa fa-user-plus" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="nav-item active">
+                    <a
+                            class="nav-link"
+                            href="{% url 'signin' %}"
+                            style="color: white; font-weight: bold"
+                    >
+                        Sign In &nbsp;<i class="fa fa-sign-in" aria-hidden="true"></i>
+                    </a>
+                </li>
+            {% else %}
+                <!-- If the user is authenticated -->
+                <li class="nav-item dropdown">
+                    <a
+                            class="nav-link dropdown-toggle"
+                            href="#"
+                            id="profileDropdown"
+                            role="button"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                    >
+                        <!-- Display the user's initials or profile picture here -->
+                        <div class="user-icon">
+                <span class="initials"
+                >{{ user.first_name|slice:":1"|upper }}</span
+                >
+                        </div>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="profileDropdown">
+                        <!-- Add user-related options with icons here -->
+                        <a class="dropdown-item" href="{% url 'Myquestions' %}">
+                            <i class="fa fa-question-circle"></i> My Questions
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'logout' %}">
+                            <i class="fa fa-sign-out"></i> Logout
+                        </a>
+                        <!-- Add more items as needed -->
+                    </div>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+<!-- Sidebar -->
+<div class="wrapper d-flex align-items-stretch">
+    <nav id="sidebar">
+        <div class="custom-menu">
+            <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                <i class="fa fa-bars"></i>
+                <span class="sr-only">Toggle Menu</span>
+            </button>
+        </div>
+        <div class="p-4">
+            <h1>
+                <a href="{% url 'index' %}" class="logo">AskSbtet?<span>Ask and Learn</span></a>
+            </h1>
+            <ul class="list-unstyled components mb-5">
+                <li class="active">
+                    <a href="{% url 'index' %}"><span class="fa fa-home mr-3"></span> Home</a>
+                </li>
+                <li>
+                    <a href="{% url 'branch' %}">
+                        <span class="fa fa-question-circle mr-3"></span> Questions
+                    </a>
+                    <!-- Sub-menu starts here -->
+                    <ul class="list-unstyled components-sub">
+                        <a href="{% url 'chatbot' %}" style="text-align: center">Quick Doubt Solver</a>
+                        <!-- Add more sub-menu items as needed -->
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="{% url 'aboutus' %}"><span class="fa fa-user mr-3"></span> About Us</a>
+                </li>
+                <li>
+                    <a href="{% url 'blog' %}"><span class="fa fa-sticky-note mr-3"></span> Blog</a>
+                </li>
+                <!-- Add more navigation items here -->
+                <li>
+                    <a href="{% url 'contactus' %}"><span class="fa fa-paper-plane mr-3"></span> Contact Us</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div id="content" class="p-4 p-md-5 pt-5">
+        <div class="container-sm">
+            <div class="container">
+                <h1 class="text-center"
+                    style="color: white; background-color: #0056b3; padding: 0.5rem; border-radius: 10px;">
+                    "Empowering the Future: The Role of SBTET in Andhra Pradesh"
+                </h1>
+                <p></p>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="single-blog">
+                            <img
+                                    src="https://www.iitms.co.in/blog/img/guide-to-national-board-of-accreditation.jpg"
+                                    height="180"
+                                    width="290"
+                            />
+                            <h2>Quality Education for All</h2>
+                            <p class="blog-text">
+                                SBTET's primary mission is to provide quality technical education
+                                to students across Andhra Pradesh. Through its various diploma and
+                                certificate programs, it ensures that students receive
+                                industry-relevant education, equipping them with the skills needed
+                                for a competitive job market.
+                            </p>
+                            <p><a href="#" class="read-more-btn">Read More</a></p>
+                        </div>
+                    </div>
+                    <!--second-->
+                    <div class="col-md-4">
+                        <div class="single-blog">
+                            <img
+                                    src="https://dtetech.karnataka.gov.in/dteone/images/dipcurri.jpg"
+                                    height="180"
+                                    width="290"
+                            />
+                            <h2>Continuous Curriculum Development</h2>
+                            <p class="blog-text">
+                                SBTET is committed to enhancing the employability of students. It
+                                offers skill development programs, workshops, and seminars that
+                                provide students with practical skills and hands-on experience,
+                                making them valuable assets in the workforce and provides them
+                                more knowledge
+                            </p>
+                            <p><a href="#" class="read-more-btn">Read More</a></p>
+                        </div>
+                    </div>
+                    <!--third-->
+                    <div class="col-md-4">
+                        <div class="single-blog">
+                            <img
+                                    src="https://knnindia.co.in/uploads/newsfiles/SD-Training-13-7-2022.jpg"
+                                    height="180"
+                                    width="290"
+                            />
+                            <h2>Skill Development Programs</h2>
+                            <p class="blog-text">
+                                SBTET is committed to enhancing the employabilityof students. It
+                                offers skill development programs,workshops, and seminars that
+                                provide students with practical skills and hands-on experience,
+                                makingthem valuable assets in the workforce.Developing their
+                                skills to enhance capability and achieve jobs.
+                            </p>
+                            <p><a href="#" class="read-more-btn">Read More</a></p>
+                        </div>
+                    </div>
+                </div>
+                <!--row 2-->
+                <!--1st col-->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="single-blog">
+                            <img
+                                    src="https://static.toiimg.com/photo/msid-100090219/100090219.jpg"
+                                    height="180"
+                                    width="290"
+                            />
+                            <h2>Digital Transformation</h2>
+                            <p class="blog-text">
+                                In today's digital age, SBTET is embracing technology to
+                                streamline processes and enhance accessibility.various fielsd are
+                                Onlineregistration, digital certificates, and e-learning resources
+                                are some of the digital initiatives that benefit both students and
+                                institutions .
+                            </p>
+                            <p><a href="#" class="read-more-btn">Read More</a></p>
+                        </div>
+                    </div>
+                    <!--2nd col-->
+                    <div class="col-md-4">
+                        <div class="single-blog">
+                            <img
+                                    src="https://www.usatoday.com/gcdn/-mm-/20633832158166c7e630e2110f6d5b4e08bbda9c/c=0-377-1732-1356/local/-/media/2016/06/02/USATODAY/USATODAY/636004243557322216-ThinkstockPhotos-499155570.jpg?width=1200&disable=upscale&format=pjpg&auto=webp"
+                                    height="180"
+                                    width="290"
+                            />
+                            <h2>Industry Partnerships</h2>
+                            <p class="blog-text">
+                                SBTET collaborates with industry leaders to bridge the gap between
+                                academia and the job market. These partnerships create internship
+                                opportunities, guest lectures, and real-world projects, giving
+                                students a taste of industry life Provides jobs to students in
+                                diploma level.
+                            </p>
+                            <p>
+                                <a href="https://sbtet.ap.gov.in/APSBTET" class="read-more-btn"
+                                >Read More</a
+                                >
+                            </p>
+                        </div>
+                    </div>
+                    <!--3rd col-->
+                    <div class="col-md-4">
+                        <div class="single-blog">
+                            <img
+                                    src="https://www.lkdsb.net/school/JMSS/StudentServices/FeaturedStories/studentservices2019-20.png"
+                                    height="180"
+                                    width="290"
+                            />
+                            <h2>Student Support Services</h2>
+                            <p class="blog-text">
+                                SBTET understands the importance of student support services.
+                                Counseling, career guidance, and financial aid programs are in
+                                place to assist students in their educational journey. Supports
+                                students even after diploma and encourages tem towards their
+                                career.
+                            </p>
+                            <p>
+                                <a href="https://sbtet.ap.gov.in/APSBTET/" class="read-more-btn"
+                                >Read More</a
+                                >
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!--row3-->
+                <!---col1-->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="single-blog">
+                            <img
+                                    src="https://manavrachna.edu.in/wp-content/uploads/2016/07/research-innovation-1024x585.jpg"
+                                    height="180"
+                                    width="290"
+                            />
+                            <h2>Research and Innovation</h2>
+                            <p class="blog-text">
+                                Encouraging research and innovation is a top priority for SBTET.
+                                It fosters an environment where students and faculty can explore
+                                innovative ideas and contribute to technological advancements.
+                            </p>
+                            <p>
+                                <a href="https://sbtet.ap.gov.in/APSBTET/" class="read-more-btn"
+                                >Read More</a
+                                >
+                            </p>
+                        </div>
+                    </div>
+                    <!--col2-->
+                    <div class="col-md-4">
+                        <div class="single-blog">
+                            <img
+                                    src="https://websites.dacdb.com/ColumbiaCenter_3105_v6/Community%20service.jpg"
+                                    height="200"
+                                    width="290"
+                            />
+                            <h2>Community Engagement</h2>
+                            <p class="blog-text">
+                                SBTET engages with local communities, organizing outreach
+                                programs, skill development workshops for underprivileged youth,
+                                and initiatives that benefit society as a whole.
+                            </p>
+                            <p>
+                                <a href="https://sbtet.ap.gov.in/APSBTET/" class="read-more-btn"
+                                >Read More</a
+                                >
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer mt-3">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4 style="color: white">Connect with Us</h4>
+                        <!-- Social media icons -->
+                        <a href="#"><i class="fa fa-facebook"></i></a>
+                        <a href="#"><i class="fa fa-twitter"></i></a>
+                        <a href="#"><i class="fa fa-instagram"></i></a>
+                        <a href="#"><i class="fa fa-linkedin"></i></a>
+                    </div>
+                    <div class="col-md-6">
+                        <h4 style="color: white">About AskSbtet</h4>
+                        <p style="color: white">
+                            AskSbtet is a dynamic online platform designed to foster a
+                            thriving and interactive community for students and educators
+                            alike. It serves as a hub for knowledge sharing, question
+                            asking, and collaboration within the academic world.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+<script></script>
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

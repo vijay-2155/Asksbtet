@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <p style="font-size: 16px; color: #333; margin: 0;">
+        <span style="font-weight: bold;">{{ sender_name }}</span> from
+        <span style="font-style: italic;">{{ sender_college }}</span> has answered your question.
+    </p>
+    <p style="font-size: 16px; color: #333; margin: 0;">
+        <strong>Question:</strong> {{ question_title }}
+    </p>
+    <p style="font-size: 16px; color: #333; margin: 0;">
+        <strong>Answer:</strong> {{ answer_text|safe }}
+    </p>
+    <p style="font-size: 16px; color: #333; margin: 0;">
+        View the answer <a href="{{ question_url }}" style="text-decoration: none; color: #007BFF;">here</a>.
+    </p>
+</body>
+</html>

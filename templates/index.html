@@ -1,0 +1,383 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Ask Sbtet a Student Community</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet"/>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}"/>
+    <link rel="shortcut icon" href="{% static 'images/AP-SBTET.png' %}" type="image/x-icon"/>
+    <style>
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: antiquewhite;
+        }
+
+        .invitation-card {
+            margin-bottom: 30px;
+            background: #0056b3;
+            border-radius: 10px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            padding: 20px;
+        }
+
+        .invitation-card h2 {
+            font-size: 24px;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .invitation-card p {
+            font-size: 16px;
+            color: #f0f0f0;
+            margin-top: 20px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .invitation-card .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #4caf50;
+            color: #fff;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+          .search-container {
+            position: relative;
+        }
+
+        .search-results {
+            position: absolute;
+            background: white;
+            border: 1px solid #ccc;
+            max-height: 150px;
+            width: 100%;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .results-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .results-list li {
+            padding: 5px;
+        }
+
+        .results-list a {
+            text-decoration: none;
+            color: #333;
+            display: block;
+        }
+
+        .results-list a:hover {
+            background: #f0f0f0;
+        }
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'index' %}">
+            <img src="{% static 'images/AP-SBTET.png' %}" alt="Logo" height="70"/>
+            AskSbtet?
+            <!-- Add your brand name here -->
+        </a>
+        <ul class="navbar-nav ml-auto">
+            <!-- If the user is not authenticated -->
+            {% if not user.is_authenticated %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'signup' %}" style="color: white; font-weight: bold">
+                        Sign Up &nbsp;<i class="fa fa-user-plus" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'signin' %}" style="color: white; font-weight: bold">
+                        Sign In &nbsp;<i class="fa fa-sign-in" aria-hidden="true"></i>
+                    </a>
+                </li>
+            {% else %}
+                <!-- If the user is authenticated -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <!-- Display the user's initials or profile picture here -->
+                        <div class="user-icon">
+                            <span class="initials">{{ user.first_name|slice:":1"|upper }}</span>
+                        </div>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="profileDropdown">
+                        <!-- Add user-related options with icons here -->
+                        <a class="dropdown-item" href="{% url 'Myquestions' %}">
+                            <i class="fa fa-question-circle"></i> My Questions
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'logout' %}">
+                            <i class="fa fa-sign-out"></i> Logout
+                        </a>
+                        <!-- Add more items as needed -->
+                    </div>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+<!-- Sidebar -->
+<div class="wrapper d-flex align-items-stretch">
+    <nav id="sidebar">
+        <div class="custom-menu">
+            <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                <i class="fa fa-bars"></i>
+                <span class="sr-only">Toggle Menu</span>
+            </button>
+        </div>
+        <div class="p-4">
+            <h1>
+                <a href="{% url 'index' %}" class="logo">AskSbtet?<span>Ask and Learn</span></a>
+            </h1>
+            <ul class="list-unstyled components mb-5">
+                <li class="active">
+                    <a href="{% url 'index' %}"><span class="fa fa-home mr-3"></span> Home</a>
+                </li>
+                <li>
+                    <a href="{% url 'branch' %}">
+                        <span class="fa fa-question-circle mr-3"></span> Questions
+                    </a>
+                    <!-- Sub-menu starts here -->
+                    <ul class="list-unstyled components-sub">
+                        <a href="{% url 'chatbot' %}" style="text-align: center">Quick Doubt Solver</a>
+                        <!-- Add more sub-menu items as needed -->
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="{% url 'aboutus' %}"><span class="fa fa-user mr-3"></span> About Us</a>
+                </li>
+                <li>
+                    <a href="{% url 'blog' %}"><span class="fa fa-sticky-note mr-3"></span> Blog</a>
+                </li>
+                <!-- Add more navigation items here -->
+                <li>
+                    <a href="{% url 'contactus' %}"><span class="fa fa-paper-plane mr-3"></span> Contact Us</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div id="content" class="p-4 p-md-5 pt-5">
+        <div class="container-sm">
+            {% if messages %} {% for message in messages %} {% if message.tags == 'success' %}
+                <div class="alert alert-success">{{ message }}</div>
+            {% elif message.tags == 'error' or message.tags == 'warning' %}
+                <div class="alert alert-danger">{{ message }}</div>
+            {% endif %} {% endfor %} {% endif %}
+            <div class="invitation-card" class="container-sm">
+                <h2 class="mb-4">Welcome to Our Student Community</h2>
+                <p>
+                    AskSbtet is a dynamic online platform designed to foster a
+                    thriving and interactive community for students and educators
+                    alike. It serves as a hub for knowledge sharing, question asking,
+                    and collaboration within the academic world.
+                </p>
+                {% if user.is_authenticated %}
+                    <h1 style="color: white; font-weight: bold">
+                        Hello, {{ user.first_name }}
+                    </h1>
+                {% else %}
+                    <a href="{% url 'signup' %}" class="btn">Join Now</a>
+                {% endif %}
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="search-container">
+                        <form action="/search" method="GET">
+                            <input type="text" placeholder="Search questions..." name="query" id="search-input" autocomplete="false"/>
+                            <button type="submit"><i class="fa fa-search"></i></button>
+                        </form>
+                    </div>
+                </div>
+
+
+                <div class="col mt-3 ml-8">
+                    <button class="btn btn-primary" onclick="checkSignIn()" style="font-weight: bold">
+                        <i class="fa fa-question-circle"></i> Ask a Question
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col mt-3 ml-8">
+                     <div id="search-results" style="background-color: white; color: black;padding: 0.1rem;border-radius: 5px"></div>
+                </div>
+            </div>
+            <h2 class="mb-4 mt-3" style="text-align: center">Top Questions</h2>
+        </div>
+        <div id="question-container">
+            {% for question in questions %}
+                <div class="question-block">
+                    <div class="question-info">
+                        <div class="views">
+                            <span class="view-count">{{ question.view_count }}</span>
+                            <span class="view-label">Views</span>
+                        </div>
+                    </div>
+                    <div class="question-content">
+                        <h3 class="question-title">
+                            <a href="{% url 'question_detail' question.id %}">{{ question.title }}</a>
+                        </h3>
+                        <p class="question-description">
+                            {{ question.description|safe }}
+                        </p>
+                        <div class="engineering-stream" style="font-weight: bold">
+                            <a href="#" class="stream-link">{{ question.stream }}</a>
+                        </div>
+                        <div class="asked-by" style="color: black; font-weight: bold; text-align: end">
+                            Asked by: {{ question.user.first_name }}
+                            <!-- Display the username of the user who asked the question -->
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <button id="show-more-button" class="btn btn-primary mt-3">
+            Show More
+        </button>
+    </div>
+</div>
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h4 style="color: white">Connect with Us</h4>
+                <!-- Social media icons -->
+                <a href="#"><i class="fa fa-facebook"></i></a>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+                <a href="#"><i class="fa fa-instagram"></i></a>
+                <a href="#"><i class="fa fa-linkedin"></i></a>
+            </div>
+            <div class="col-md-6">
+                <h4 style="color: white">About AskSbtet</h4>
+                <p style="color: white">
+                    AskSbtet is a dynamic online platform designed to foster a
+                    thriving and interactive community for students and educators
+                    alike. It serves as a hub for knowledge sharing, question asking,
+                    and collaboration within the academic world.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/popper.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+<script>
+    function checkSignIn() {
+        // Check if the user is authenticated using Django's authentication system
+        let isAuthenticated = {{ user.is_authenticated| lower }}; // Convert to lowercase for JavaScript
+
+        if (isAuthenticated === true) {
+            // If authenticated, allow the user to ask a question
+            // You can redirect them to the question form or any other action
+            window.location.href = "/questions/AskyourQuestion/";
+        } else {
+            // If not authenticated, show the custom alert message
+            var confirmation = confirm(
+                "AskSbtet says: You must sign in to ask a question. Click OK to sign in or Cancel to stay on this page."
+            );
+
+            if (confirmation) {
+                // Redirect to the sign-in page if the user clicks OK
+                window.location.href = "/auth/signin/";
+            }
+        }
+    }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const questionContainer = document.getElementById('question-container');
+        const showMoreButton = document.getElementById('show-more-button');
+        let visibleQuestions = 5; // Number of questions initially visible
+        const totalQuestions = {{ questions| length }}; // Total number of questions
+
+        // Function to toggle the visibility of questions
+        function toggleQuestions() {
+            for (let i = 0; i < totalQuestions; i++) {
+                const question = questionContainer.children[i];
+                if (i < visibleQuestions) {
+                    question.style.display = 'block';
+                } else {
+                    question.style.display = 'none';
+                }
+            }
+        }
+
+        // Initial toggle
+        toggleQuestions();
+
+        // Show more button click event
+        showMoreButton.addEventListener('click', function () {
+            visibleQuestions += 5; // Increase the number of visible questions by 5
+            if (visibleQuestions >= totalQuestions) {
+                showMoreButton.style.display = 'none'; // Hide the button when all questions are visible
+            }
+            toggleQuestions();
+        });
+    });
+
+
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("search-input");
+        const searchResults = document.getElementById("search-results");
+
+        searchInput.addEventListener("input", function () {
+            const query = searchInput.value;
+
+            if (query) {
+                fetch(`/search/?query=${query}`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        searchResults.innerHTML = ""; // Clear previous results
+
+                        if (data.results.length > 0) {
+                            data.results.forEach((result) => {
+                                const resultItem = document.createElement("div");
+                                resultItem.innerHTML = `<a href="questions/question/${result.id}">${result.title}</a>`;
+                                searchResults.appendChild(resultItem);
+                            });
+                        } else {
+                            searchResults.innerHTML = "No results found.";
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Error:", error);
+                    });
+            } else {
+                searchResults.innerHTML = ""; // Clear results when the input is empty
+            }
+        });
+    });
+</script>
+</body>
+
+</html>

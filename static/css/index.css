@@ -1,0 +1,230 @@
+.user-name {
+    font-weight: bold;
+    margin-right: 10px;
+  }
+
+  /* Style the profile icon */
+  .navbar-nav .nav-item .nav-link.dropdown-toggle .fa-user-circle {
+    font-size: 24px;
+    color: #fff;
+    transition: color 0.3s;
+  }
+
+  /* Change color on hover */
+  .navbar-nav .nav-item .nav-link.dropdown-toggle:hover .fa-user-circle {
+    color: 007bff;
+  }
+
+  .mobile-dropdown-menu {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  /* Media query for screens with a maximum width of 768px (adjust as needed) */
+  @media (max-width: 768px) {
+    .mobile-dropdown-menu {
+      max-height: none;
+      /* Remove max-height on mobile */
+      overflow-y: initial;
+      /* Allow scrolling as needed on mobile */
+    }
+  }
+
+  .navbar-brand {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+  }
+
+  .user-icon {
+    background-color: green;
+    /* Example background color */
+    color: #fff;
+    /* Example text color */
+    border-radius: 50%;
+    /* Make it circular */
+    width: 50px;
+    /* Adjust size as needed */
+    height: 50px;
+    /* Adjust size as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  .navbar-custom {
+    background-color: #0056b3;
+  }
+
+  /* Style the search container */
+  .search-container {
+    display: flex;
+    margin-right: 15px;
+  }
+
+  /* Style the search input field */
+  #search-input {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    width: 15rem;
+    outline: none;
+  }
+
+  /* Style the search button */
+  button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 10px 15px;
+  }
+
+  /* Style the search button on hover */
+  button:hover {
+    background-color: #0056b3;
+  }
+
+  /* Footer styles */
+  .footer {
+    background-color: #0056b3;
+    /* Background color */
+    color: #fff;
+    /* Text color */
+    padding: 40px 0;
+    /* Padding top and bottom */
+  }
+
+  .footer h4 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  /* Social media icons */
+  .footer a {
+    color: #fff;
+    font-size: 24px;
+    margin-right: 15px;
+    /* Add spacing between icons */
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  /* Social media icons on hover */
+  .footer a:hover {
+    color: #007bff;
+  }
+
+  /* Description text */
+  .footer p {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  /* Adjust the footer for smaller screens */
+  @media (max-width: 768px) {
+    .footer {
+      padding: 20px 0;
+    }
+
+    .footer h4 {
+      font-size: 16px;
+    }
+
+    .footer a {
+      font-size: 20px;
+    }
+
+    .footer p {
+      font-size: 14px;
+    }
+  }
+
+  /* Question block styles */
+  .question-block {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: #fff;
+  }
+
+  /* Question info styles */
+  .question-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .votes,
+  .answers,
+  .views {
+    text-align: center;
+  }
+
+  /* Question title styles */
+  .question-title {
+    font-size: 18px;
+    margin: 0;
+  }
+
+  .question-title a {
+    text-decoration: none;
+    color: #007bff;
+  }
+
+  /* Question description styles */
+  .question-description {
+    font-size: 16px;
+    margin: 10px 0;
+  }
+
+  /* Engineering stream tag styles */
+  .engineering-stream {
+    display: inline-block;
+  }
+
+  .stream-link {
+    background-color: #007bff;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    text-decoration: none;
+    /* Remove underline from the hyperlink */
+  }
+
+  .stream-link:hover {
+    background-color: #0056b3;
+  }
+
+  /* CSS for the modal dialog */
+.custom-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+/* Style the buttons */
+.btn {
+  margin: 5px;
+}
