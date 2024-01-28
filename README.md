@@ -13,7 +13,7 @@ Follow these steps to set up the project locally:
 ### Setting Up Virtual Environment
 
 1. Clone the repository:
-   git clone https://github.com/your-username/sbtet-community.git
+   git clone 
 Navigate to the project directory:
 
 cd sbtet-community
